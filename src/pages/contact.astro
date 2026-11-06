@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { company, materials, sectors } from '../data/site.js';
+const socials = ['facebook', 'linkedin', 'instagram', 'youtube', 'x', 'tiktok', 'snapchat'];
+const names = { facebook: 'Facebook', linkedin: 'LinkedIn', instagram: 'Instagram', youtube: 'YouTube', x: 'X', tiktok: 'TikTok', snapchat: 'Snapchat' };
+const osm = (l) => `https://www.openstreetmap.org/export/embed.html?bbox=${l.lng - 0.012}%2C${l.lat - 0.007}%2C${l.lng + 0.012}%2C${l.lat + 0.007}&layer=mapnik&marker=${l.lat}%2C${l.lng}`;
+---
+<Layout title="Contact, quotation & appointments" description="Contact Staron Egypt: head office in New Cairo, warehouse and factory in 10th of Ramadan City. Request a quotation or schedule a technical appointment." image="installers" current="contact">
+  <PageHero k="installers" title="Talk to the team that builds it" text="Request a quotation, book a technical appointment or visit our factory." crumbs={[['Contact']]} />
+
+  <section class="sec wrap" aria-labelledby="c-h">
+    <div class="cgrid">
+      <div class="cinfo" data-reveal>
+        <h2 class="h-sec" id="c-h">Contact</h2>
+        <div>
+          <a class="big" href={`tel:${company.phone.replace(/\s/g, '')}`}>{company.phone}</a>
+          <a class="big" href={`tel:${company.landline.replace(/\s/g, '')}`}>{company.landline}</a>
+          <a class="big" href={`mailto:${company.email}`}>{company.email}</a>
+        </div>
+        <div>
+          <h3 class="h-3" style="margin-bottom:12px">Work week</h3>
+          <dl class="week">{company.workweek.map(([d, t]) => <><dt>{d}</dt><dd>{t}</dd></>)}</dl>
+        </div>
+        <div>
+          <h3 class="h-3" style="margin-bottom:8px">Follow us</h3>
+          <ul class="socials" aria-label="Social media" style="flex-wrap:wrap">
+            {socials.map((s) => <li><a href={company.social[s]} target="_blank" rel="noopener" aria-label={names[s]}><Icon name={s} /></a></li>)}
+            <li><a href={`https://wa.me/${company.whatsapp}`} target="_blank" rel="noopener" aria-label="WhatsApp"><Icon name="whatsapp" /></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="cform" id="form" data-reveal-self>
+        <h2 class="h-sec" style="margin-bottom:28px">Send a request</h2>
+        <form data-contact data-to={company.email} novalidate>
+          <div class="field full"><label for="f-type">I would like to</label>
+            <select id="f-type" name="request">
+              <option value="quotation">Get a quotation</option>
+              <option value="appointment">Schedule an appointment</option>
+              <option value="documents">Receive technical documents</option>
+              <option value="samples">Order samples</option>
+              <option value="general">Ask a general question</option>
+            </select>
+          </div>
+          <div class="field"><label for="f-name">Full name</label><input id="f-name" name="name" required autocomplete="name" maxlength="120" /></div>
+          <div class="field"><label for="f-co">Company</label><input id="f-co" name="company" autocomplete="organization" maxlength="120" /></div>
+          <div class="field"><label for="f-mail">Email</label><input id="f-mail" name="email" type="email" required autocomplete="email" maxlength="160" /></div>
+          <div class="field"><label for="f-tel">Phone</label><input id="f-tel" name="phone" type="tel" required autocomplete="tel" pattern="[0-9 +()-]{7,20}" aria-describedby="f-tel-h" /><span id="f-tel-h" class="note">Digits, spaces and + only</span></div>
+          <div class="field"><label for="f-sec">Sector</label><select id="f-sec" name="sector"><option value="">Select</option>{sectors.map((s) => <option>{s.name}</option>)}</select></div>
+          <div class="field"><label for="f-mat">Material</label><select id="f-mat" name="material"><option value="">Select</option>{materials.map((m) => <option>{m.name}</option>)}<option>Several materials</option></select></div>
+          <div class="field" data-appt hidden><label for="f-date">Preferred date</label><input id="f-date" name="date" type="date" /></div>
+          <div class="field" data-appt hidden><label for="f-time">Preferred time</label><input id="f-time" name="time" type="time" min="09:00" max="17:00" /></div>
+          <div class="field full"><label for="f-msg">Project details</label><textarea id="f-msg" name="message" maxlength="3000" placeholder="Location, areas, quantities, programme…"></textarea></div>
+          <div class="full" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+            <p class="note">We reply within one working day.</p>
+            <button class="btn btn--bronze" type="submit">Send request<Icon name="arrow" /></button>
+          </div>
+          <p class="form-msg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec wrap" aria-labelledby="m-h">
+    <h2 class="h-sec" id="m-h" data-split style="margin-bottom:40px">Office, warehouse and factory</h2>
+    <div class="maps" data-maps data-reveal>
+      <div class="maptabs" role="tablist" aria-label="Locations">
+        {company.locations.map((l, i) => (
+          <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} aria-controls="mapbox" data-src={osm(l)} data-name={l.name}>
+            <b>{l.name}</b><span>{l.address}</span>
+          </button>
+        ))}
+      </div>
+      <div class="mapbox" id="mapbox" role="tabpanel">
+        <iframe src={osm(company.locations[0])} title={`Map: ${company.locations[0].name}`} loading="lazy" referrerpolicy="no-referrer"></iframe>
+      </div>
+    </div>
+  </section>
+</Layout>

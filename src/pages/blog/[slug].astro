@@ -1,0 +1,37 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import PostCards from '../../components/PostCards.astro';
+import Cta from '../../components/Cta.astro';
+import { posts, fmtDate, M, B, S, SP, A, P } from '../../data/site.js';
+import { u, routes } from '../../data/url.js';
+export const getStaticPaths = () => posts.map((p) => ({ params: { slug: p.slug }, props: { p } }));
+const { p } = Astro.props;
+const related = posts.filter((x) => x !== p).map((x) => ({ x, n: Object.keys(p.tags).reduce((s, k) => s + x.tags[k].filter((t) => p.tags[k].includes(t)).length, 0) })).sort((a, b) => b.n - a.n).slice(0, 3).map((r) => r.x);
+const links = [
+  ...p.tags.materials.map((s) => [M[s].name, routes.material(s)]),
+  ...p.tags.brands.map((s) => [B[s].name, routes.brand(s)]),
+  ...p.tags.products.map((s) => [`${B[P[s].brand].name} ${P[s].name}`, routes.product(P[s])]),
+  ...p.tags.sectors.map((s) => [S[s].name, routes.sector(s)]),
+  ...p.tags.spaces.map((s) => [SP[s].name, routes.space(s)]),
+  ...p.tags.applications.map((s) => [A[s].name, routes.application(s)]),
+];
+const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: p.title, datePublished: p.date, description: p.excerpt, author: { '@type': 'Organization', name: 'Staron Egypt' }, publisher: { '@type': 'Organization', name: 'Staron Egypt' } };
+---
+<Layout title={p.title} description={p.excerpt} image={p.img} current="blog" jsonld={[ld]}>
+  <PageHero k={p.img} title={p.title} text={`${fmtDate(p.date)} · ${p.minutes} min read`} crumbs={[['Blog', u('blog')], [p.title]]} />
+  <article class="sec wrap">
+    <div class="split">
+      <div class="l--wide prose" data-reveal>
+        <p class="lead">{p.excerpt}</p>
+        {p.body.map(([t, c]) => t === 'h2' ? <h2>{c}</h2> : <p>{c}</p>)}
+      </div>
+      <aside class="r--narrow sticky" data-reveal>
+        <h2 class="h-3" style="margin-bottom:16px">In this article</h2>
+        <div class="chips">{links.map(([l, h]) => <a href={h}>{l}</a>)}</div>
+      </aside>
+    </div>
+  </article>
+  <PostCards list={related} heading="Related articles" />
+  <Cta />
+</Layout>

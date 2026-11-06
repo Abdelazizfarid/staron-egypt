@@ -1,0 +1,19 @@
+---
+import { img } from '../data/site.js';
+import { asset } from '../data/url.js';
+const { k, eager = false, sizes = '100vw', class: cls, alt, ...rest } = Astro.props;
+const portrait = k.startsWith('m-');
+const [w, h] = portrait ? [896, 1120] : [1344, 752];
+---
+<img
+  src={asset(`img/${k}-1920.webp`)}
+  srcset={portrait ? undefined : `${asset(`img/${k}-960.webp`)} 960w, ${asset(`img/${k}-1920.webp`)} 1344w`}
+  sizes={portrait ? undefined : sizes}
+  width={w} height={h}
+  alt={alt ?? img[k] ?? ''}
+  loading={eager ? 'eager' : 'lazy'}
+  fetchpriority={eager ? 'high' : undefined}
+  decoding="async"
+  class={cls}
+  {...rest}
+/>

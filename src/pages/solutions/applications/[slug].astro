@@ -1,0 +1,50 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHero from '../../../components/PageHero.astro';
+import Pic from '../../../components/Pic.astro';
+import Icon from '../../../components/Icon.astro';
+import PostCards from '../../../components/PostCards.astro';
+import Cta from '../../../components/Cta.astro';
+import { applications, spaces, P, B, postsFor } from '../../../data/site.js';
+import { u, routes } from '../../../data/url.js';
+export const getStaticPaths = () => applications.map((a) => ({ params: { slug: a.slug }, props: { a } }));
+const { a } = Astro.props;
+const where = spaces.filter((s) => s.applications.includes(a.slug));
+---
+<Layout title={a.name} description={`${a.name}: history, how we follow best practice, specifications and variants. ${a.history.slice(0, 90)}…`} image={a.img} current="solutions">
+  <PageHero k={a.img} title={a.name} text={a.variants.join(' · ')} crumbs={[['Solutions', u('solutions')], [a.name]]} />
+
+  <section class="sec wrap" aria-labelledby="h-h">
+    <div class="split">
+      <div class="l" data-reveal>
+        <h2 class="h-sec" id="h-h">Background</h2>
+        <p class="lead" style="margin-top:24px">{a.history}</p>
+        {where.length > 0 && <><h3 class="h-3" style="margin:40px 0 16px">Where we install it</h3><div class="chips">{where.map((s) => <a href={routes.space(s.slug)}>{s.name}</a>)}</div></>}
+      </div>
+      <div class="r" data-reveal>
+        <h2 class="h-sec" id="bp-h">How we follow best practice</h2>
+        <ol class="steps" style="margin-top:32px">{a.practice.map((x) => <li><span>{x}</span></li>)}</ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="sp-h">
+    <div class="dark round" style="margin-inline:12px;padding-block:clamp(64px,8vw,120px)">
+      <div class="wrap split">
+        <div class="l" data-reveal>
+          <h2 class="h-sec" id="sp-h">Specifications</h2>
+          <dl class="facts" style="margin-top:32px">{a.specs.map(([k, v]) => <div><dt class="muted">{k}</dt><dd>{v}</dd></div>)}</dl>
+        </div>
+        <div class="r" data-reveal>
+          <h2 class="h-sec">Variants</h2>
+          <ul class="uses" style="margin:32px 0 48px">{a.variants.map((v) => <li>{v}</li>)}</ul>
+          <h3 class="h-3" style="margin-bottom:16px">Products used</h3>
+          <div class="chips">{a.products.map((p) => <a href={routes.product(P[p])}>{B[P[p].brand].name} {P[p].name}</a>)}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <PostCards list={postsFor('applications', a.slug)} heading="Related reading" />
+  <Cta />
+</Layout>

@@ -1,0 +1,42 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Pic from '../../components/Pic.astro';
+import Cta from '../../components/Cta.astro';
+import { posts, materials, sectors, fmtDate } from '../../data/site.js';
+import { routes } from '../../data/url.js';
+const tagsOf = (p) => Object.values(p.tags).flat().join(' ');
+const textOf = (p) => `${p.title} ${p.excerpt} ${Object.values(p.tags).flat().join(' ').replace(/-/g, ' ')}`.toLowerCase();
+---
+<Layout title="Blog" description="Articles from the Staron Egypt technical office on solid surface, quartz, vinyl flooring, HPL compact and wall protection in hospitals, banks, homes and offices." image="desk" current="blog">
+  <PageHero k="desk" title="Notes from the technical office" text="How materials behave, where they fail, and how we detail around it." crumbs={[['Blog']]} />
+  <section class="sec wrap" data-blog aria-labelledby="b-h">
+    <h2 id="b-h" class="sr">All articles</h2>
+    <div class="filters" data-reveal>
+      <div class="field"><label for="bq">Search articles</label><input id="bq" type="search" placeholder="Hospital, quartz, seams…" /></div>
+      <div class="field"><label for="btag">Filter by topic</label>
+        <select id="btag">
+          <option value="">All topics</option>
+          <optgroup label="Materials">{materials.map((m) => <option value={m.slug}>{m.name}</option>)}</optgroup>
+          <optgroup label="Sectors">{sectors.map((s) => <option value={s.slug}>{s.name}</option>)}</optgroup>
+        </select>
+      </div>
+      <div class="field"><label for="bsort">Sort</label>
+        <select id="bsort"><option value="new">Newest first</option><option value="old">Oldest first</option><option value="az">Title A to Z</option></select>
+      </div>
+    </div>
+    <p class="small muted" data-bcount style="margin-bottom:24px" aria-live="polite">{posts.length} articles</p>
+    <div class="blist">
+      {posts.map((p) => (
+        <a class="pcard" href={routes.post(p.slug)} data-title={p.title} data-date={p.date} data-tags={tagsOf(p)} data-text={textOf(p)}>
+          <div class="pcard__pic"><Pic k={p.img} sizes="(max-width: 760px) 100vw, 33vw" /></div>
+          <p class="meta">{fmtDate(p.date)} · {p.minutes} min read</p>
+          <h3>{p.title}</h3>
+          <p>{p.excerpt}</p>
+        </a>
+      ))}
+    </div>
+    <p class="empty">No articles match. Clear the search or choose another topic.</p>
+  </section>
+  <Cta />
+</Layout>

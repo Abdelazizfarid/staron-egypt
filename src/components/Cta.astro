@@ -1,0 +1,17 @@
+---
+import Icon from './Icon.astro';
+import { u } from '../data/url.js';
+const { title = 'Start with the drawing.', text = 'Send us your drawings or bill of quantities. Our technical office replies with materials, details and a priced proposal within five working days.' } = Astro.props;
+---
+<section class="sec" style="padding-bottom:0">
+  <div class="cta dark" data-reveal>
+    <h2 data-split>{title}</h2>
+    <div class="cta__side">
+      <p>{text}</p>
+      <div class="btns">
+        <a class="btn btn--bronze" href={u('contact', '?type=quotation#form')}>Get quotation<Icon name="arrow" /></a>
+        <a class="btn btn--light" href={u('contact', '?type=appointment#form')}>Schedule appointment</a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,52 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Pic from '../../components/Pic.astro';
+import Icon from '../../components/Icon.astro';
+import Cta from '../../components/Cta.astro';
+import { materials, B, P } from '../../data/site.js';
+import { routes } from '../../data/url.js';
+const rules = [
+  ['Proven where it matters', 'Each brand has a track record in hospitals, banks or public buildings, with certificates we can hand to a consultant.'],
+  ['One brand per material', 'We go deep instead of wide. Knowing one manufacturer well means we know every detail, tolerance and failure mode.'],
+  ['Fabrication we control', 'We only carry materials we can cut, form and install ourselves, so the warranty and the workmanship sit with one company.'],
+  ['Available in Egypt', 'Direct import and local stock in our warehouse keep programmes moving.'],
+];
+---
+<Layout title="Brands & materials" description="Five materials, five international brands: Staron solid surfaces, Belenco quartz, Tarkett vinyl flooring, CrownLam HPL compact and AKS Profil wall protection, supplied and installed by Staron Egypt." image="reception" current="brands">
+  <PageHero k="reception" title="Brands we stand behind" text="One manufacturer for each material, chosen for its record in demanding buildings and supplied directly to Egypt." crumbs={[['Brands']]} />
+
+  <section class="sec wrap" aria-labelledby="phil-h">
+    <div class="split">
+      <div class="l">
+        <h2 class="h-sec" id="phil-h" data-split>How we choose a brand</h2>
+        <p class="lead" style="margin-top:24px" data-reveal-self>We put our name on the installation, so we are careful about whose name is on the material.</p>
+      </div>
+      <ul class="r timeline" data-reveal>
+        {rules.map(([t, d]) => <li style="grid-template-columns:1fr"><h3 class="h-3" style="color:var(--navy)">{t}</h3><p>{d}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec wrap" aria-labelledby="list-h">
+    <h2 class="h-sec" id="list-h" data-split style="margin-bottom:40px">Brands by material</h2>
+    <div class="rows">
+      {materials.map((m) => {
+        const b = B[m.brand];
+        return (
+          <article class="row" data-reveal-self>
+            <a class="row__pic" href={routes.brand(b.slug)} tabindex="-1" aria-hidden="true"><Pic k={b.img} sizes="(max-width: 1024px) 100vw, 33vw" alt="" /></a>
+            <div class="row__body">
+              <a class="k" href={routes.material(m.slug)}>{m.name}</a>
+              <h3><a href={routes.brand(b.slug)}>{b.name}</a></h3>
+              <p>{b.intro}</p>
+              <div class="chips" style="margin-top:16px">{b.products.map((p) => <a href={routes.product(P[p])}>{P[p].name}</a>)}</div>
+            </div>
+            <a class="row__go" href={routes.brand(b.slug)} aria-label={`${b.name} brand page`}><Icon name="arrow" /></a>
+          </article>
+        );
+      })}
+    </div>
+  </section>
+  <Cta />
+</Layout>

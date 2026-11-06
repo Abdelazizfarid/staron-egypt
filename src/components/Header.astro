@@ -1,0 +1,193 @@
+---
+import Icon from './Icon.astro';
+import { company, materials, B, P, sectors, SP, A, img } from '../data/site.js';
+import { u, asset, routes } from '../data/url.js';
+const { current = '', light = false } = Astro.props;
+const socialTop = ['facebook', 'linkedin', 'instagram', 'youtube'];
+const navs = [['About', 'about'], ['Brands', 'brands'], ['Solutions', 'solutions'], ['Blog', 'blog'], ['Contact', 'contact']];
+const office = company.locations[0];
+const first = (t) => t.split('. ')[0].replace(/\.$/, '') + '.';
+---
+<header class:list={['hdr', { light }]} data-hdr>
+  <div class="topbar">
+    <div class="wrap">
+      <ul class="socials" aria-label="Social media">
+        {socialTop.map((s) => <li><a href={company.social[s]} target="_blank" rel="noopener" aria-label={s[0].toUpperCase() + s.slice(1)}><Icon name={s} /></a></li>)}
+        <li><a href={`https://wa.me/${company.whatsapp}`} target="_blank" rel="noopener" aria-label="WhatsApp"><Icon name="whatsapp" /></a></li>
+      </ul>
+      <div class="contacts">
+        <a href={`https://www.google.com/maps?q=${office.lat},${office.lng}`} target="_blank" rel="noopener"><Icon name="pin" />{office.address}</a>
+        <a href={`tel:${company.phone.replace(/\s/g, '')}`}><Icon name="phone" />{company.phone}</a>
+        <a href={`mailto:${company.email}`}><Icon name="mail" />{company.email}</a>
+      </div>
+      <div class="search" data-search>
+        <Icon name="search" />
+        <label class="sr" for="q-top">Search the site</label>
+        <input id="q-top" type="search" placeholder="Search materials, brands, spaces…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="r-top" />
+        <div class="results" id="r-top" role="listbox"></div>
+      </div>
+      <nav class="lang" aria-label="Language">
+        <a href={u()} aria-current="true" lang="en">EN</a>
+        <a href={u('ar')} lang="ar" hreflang="ar">عربي</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="mainbar">
+    <div class="bar">
+      <a class="logo" href={u()} aria-label="Staron Egypt, home"><b>staron</b><i>EGYPT</i></a>
+      <ul class="nav">
+        {navs.map(([label, path]) => (
+          path === 'brands' || path === 'solutions'
+            ? <li><button type="button" aria-expanded="false" aria-controls={`mega-${path}`} data-mega={path}>{label}<Icon name="down" /></button></li>
+            : <li><a href={u(path)} aria-current={current === path ? 'page' : undefined}>{label}</a></li>
+        ))}
+      </ul>
+      <div class="ctas">
+        <a class="btn btn--ghost" href={u('contact', '?type=appointment#form')}>Schedule appointment</a>
+        <a class="btn btn--bronze" href={u('contact', '?type=quotation#form')}>Get quotation<Icon name="arrow" /></a>
+      </div>
+      <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer" data-burger><span></span></button>
+    </div>
+
+    <!-- Brands: material -> brand -> product slider -->
+    <div class="mega" id="mega-brands" data-panel="brands">
+      <div class="mcol">
+        <p class="mhead">Materials</p>
+        <ul class="mlist" data-col1>
+          {materials.map((m, i) => (
+            <li class:list={{ on: i === 0 }} data-key={m.slug}><a href={routes.material(m.slug)}>{m.name}<Icon name="arrow" /></a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="mcol">
+        <p class="mhead">Brand</p>
+        {materials.map((m, i) => {
+          const b = B[m.brand];
+          return (
+            <div class:list={['mpane mbrand', { on: i === 0 }]} data-pane={m.slug}>
+              <h3>{b.name}</h3>
+              <p>{b.intro}</p>
+              <ul class="mlist">
+                {b.products.map((p) => <li><a href={routes.product(P[p])}>{P[p].name}<Icon name="arrow" /></a></li>)}
+              </ul>
+              <a class="link" href={routes.brand(b.slug)} style="margin-top:14px;padding-left:14px"><span>All of {b.name}</span><Icon name="arrow" /></a>
+            </div>
+          );
+        })}
+      </div>
+      <div class="mcol">
+        {materials.map((m, i) => {
+          const list = B[m.brand].products.map((p) => P[p]);
+          return (
+            <div class:list={['mpane mslider', { on: i === 0 }]} data-pane={m.slug} data-mslider>
+              <div class="mslides">
+                {list.map((p, j) => (
+                  <a href={routes.product(p)} class:list={['mslide', { on: j === 0 }]}>
+                    <figure style="margin:0;height:100%">
+                      <img src={asset(`img/${p.img}-960.webp`)} alt={img[p.img]} loading="lazy" width="960" height="537" />
+                      <figcaption><b>{p.name}</b><span>{first(p.description)}</span></figcaption>
+                    </figure>
+                  </a>
+                ))}
+              </div>
+              <div class="mdots">
+                {list.map((p, j) => <button type="button" class:list={{ on: j === 0 }} aria-label={`Show ${p.name}`}></button>)}
+                <span class="arrows">
+                  <button type="button" data-prev aria-label="Previous"><Icon name="arrowL" /></button>
+                  <button type="button" data-next aria-label="Next"><Icon name="arrow" /></button>
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+
+    <!-- Solutions: sector -> space -> application slider -->
+    <div class="mega" id="mega-solutions" data-panel="solutions">
+      <div class="mcol">
+        <p class="mhead">Sector</p>
+        <ul class="mlist" data-col1>
+          {sectors.map((s, i) => (
+            <li class:list={{ on: i === 0 }} data-key={s.slug}><a href={routes.sector(s.slug)}>{s.name}<Icon name="arrow" /></a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="mcol">
+        <p class="mhead">Space</p>
+        {sectors.map((s, i) => (
+          <div class:list={['mpane', { on: i === 0 }]} data-pane={s.slug}>
+            <ul class="mlist" data-col2>
+              {s.spaces.map((sp, j) => (
+                <li class:list={{ on: j === 0 }} data-key={sp}><a href={routes.space(sp)}>{SP[sp].name}<Icon name="arrow" /></a></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div class="mcol">
+        {sectors.flatMap((s) => s.spaces).map((sp, i) => {
+          const list = SP[sp].applications.map((a) => A[a]);
+          return (
+            <div class:list={['mpane mslider', { on: i === 0 }]} data-pane3={sp} data-mslider>
+              <div class="mslides">
+                {list.map((a, j) => (
+                  <a href={routes.application(a.slug)} class:list={['mslide', { on: j === 0 }]}>
+                    <figure style="margin:0;height:100%">
+                      <img src={asset(`img/${a.img}-960.webp`)} alt={img[a.img]} loading="lazy" width="960" height="537" />
+                      <figcaption><b>{a.name}</b><span>{a.variants.join(' · ')}</span></figcaption>
+                    </figure>
+                  </a>
+                ))}
+              </div>
+              <div class="mdots">
+                {list.map((a, j) => <button type="button" class:list={{ on: j === 0 }} aria-label={`Show ${a.name}`}></button>)}
+                <span class="arrows">
+                  <button type="button" data-prev aria-label="Previous"><Icon name="arrowL" /></button>
+                  <button type="button" data-next aria-label="Next"><Icon name="arrow" /></button>
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer" id="drawer" data-drawer aria-label="Menu">
+    <button class="drawer-close" type="button" aria-label="Close menu" data-close><Icon name="close" /></button>
+    <div class="search" data-search style="margin-bottom:24px">
+      <Icon name="search" />
+      <label class="sr" for="q-m">Search the site</label>
+      <input id="q-m" type="search" placeholder="Search the site" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="r-m" />
+      <div class="results" id="r-m" role="listbox"></div>
+    </div>
+    <nav aria-label="Mobile">
+      <a href={u('about')}>About</a>
+      <details>
+        <summary>Brands <Icon name="down" /></summary>
+        <div class="group">
+          {materials.map((m) => <div><b>{m.name}</b><a href={routes.material(m.slug)}>About the material</a><a href={routes.brand(m.brand)}>{B[m.brand].name}</a></div>)}
+        </div>
+      </details>
+      <details>
+        <summary>Solutions <Icon name="down" /></summary>
+        <div class="group">
+          {sectors.map((s) => <div><b><a href={routes.sector(s.slug)} style="color:inherit;padding:0">{s.name}</a></b>{s.spaces.map((sp) => <a href={routes.space(sp)}>{SP[sp].name}</a>)}</div>)}
+        </div>
+      </details>
+      <a href={u('blog')}>Blog</a>
+      <a href={u('contact')}>Contact</a>
+    </nav>
+    <div class="ctas">
+      <a class="btn btn--ghost" href={u('contact', '?type=appointment#form')}>Schedule appointment</a>
+      <a class="btn btn--bronze" href={u('contact', '?type=quotation#form')}>Get quotation</a>
+    </div>
+    <ul class="socials" aria-label="Social media">
+      {socialTop.map((s) => <li><a href={company.social[s]} target="_blank" rel="noopener" aria-label={s}><Icon name={s} /></a></li>)}
+      <li><a href={`https://wa.me/${company.whatsapp}`} target="_blank" rel="noopener" aria-label="WhatsApp"><Icon name="whatsapp" /></a></li>
+    </ul>
+    <p class="small muted" style="margin-top:16px">{company.phone} · {company.email}</p>
+  </div>
+</header>

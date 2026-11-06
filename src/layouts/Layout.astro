@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { company, materials, brands, products, sectors, spaces, applications, posts, B } from '../data/site.js';
+import { u, asset, routes } from '../data/url.js';
+
+const { title, description, image = 'or', current = '', light = false, jsonld = [], noindex = false } = Astro.props;
+const fullTitle = title ? `${title} | Staron Egypt` : 'Staron Egypt | Interior finishing surfaces, supplied and installed';
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(asset(`img/${image}-1920.webp`), Astro.site).href;
+
+const index = [
+  ...materials.map((m) => ({ t: m.name, k: 'Material', u: routes.material(m.slug), x: m.short })),
+  ...brands.map((b) => ({ t: b.name, k: 'Brand', u: routes.brand(b.slug), x: b.intro })),
+  ...products.map((p) => ({ t: `${B[p.brand].name} ${p.name}`, k: 'Product', u: routes.product(p), x: p.description })),
+  ...sectors.map((s) => ({ t: s.name, k: 'Sector', u: routes.sector(s.slug), x: s.line })),
+  ...spaces.map((s) => ({ t: s.name, k: 'Space', u: routes.space(s.slug), x: s.intro })),
+  ...applications.map((a) => ({ t: a.name, k: 'Application', u: routes.application(a.slug), x: a.variants.join(' ') })),
+  ...posts.map((p) => ({ t: p.title, k: 'Article', u: routes.post(p.slug), x: p.excerpt })),
+  { t: 'About Staron Egypt', k: 'Page', u: u('about'), x: 'mission vision values history careers join our team' },
+  { t: 'Contact and quotation', k: 'Page', u: u('contact'), x: 'quotation appointment office warehouse factory map phone email' },
+];
+
+const org = {
+  '@context': 'https://schema.org', '@type': 'Organization', name: company.name, url: new URL(u(), Astro.site).href,
+  email: company.email, telephone: company.phone, description: company.description,
+  address: { '@type': 'PostalAddress', streetAddress: company.locations[0].address, addressCountry: 'EG' },
+  sameAs: Object.values(company.social),
+};
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  {noindex && <meta name="robots" content="noindex" />}
+  <meta name="theme-color" content="#004274" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Staron Egypt" />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="alternate" hreflang="en" href={canonical} />
+  <link rel="icon" href={asset('favicon.svg')} type="image/svg+xml" />
+  <link rel="sitemap" href={asset('sitemap-index.xml')} />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=sentient@300,400&f[]=general-sans@400,500,600&display=swap" rel="stylesheet" />
+  <script is:inline>document.documentElement.classList.add('js')</script>
+  <script type="application/ld+json" set:html={JSON.stringify([org, ...jsonld])} />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <Header current={current} light={light} />
+  <main id="main">
+    <slot />
+  </main>
+  <Footer />
+  <script type="application/json" id="search-index" set:html={JSON.stringify(index)} />
+  <script>
+    import '../scripts/main.js';
+  </script>
+</body>
+</html>

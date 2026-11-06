@@ -1,0 +1,16 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { u } from '../../data/url.js';
+---
+<Layout title="ستارون مصر" description="ستارون مصر: توريد وتركيب أسطح التشطيبات الداخلية. النسخة العربية قيد الإعداد.">
+  <section class="phero" lang="ar" dir="rtl">
+    <div class="phero__frame">
+      <img src={`${u().replace(/\/$/, '')}/img/or-1920.webp`} alt="غرفة عمليات مكسوة بأسطح ستارون المصمتة" width="1344" height="752" />
+      <div class="phero__scrim"></div>
+      <div class="phero__body" style="text-align:right">
+        <div><h1 data-split="now">توريد وتركيب أسطح التشطيبات الداخلية</h1></div>
+        <div><p style="margin-bottom:20px">النسخة العربية من الموقع قيد الإعداد. حتى ذلك الحين يمكنك تصفح الموقع بالإنجليزية أو التواصل معنا مباشرة.</p><a class="btn btn--light" href={u()}>English website</a></div>
+      </div>
+    </div>
+  </section>
+</Layout>

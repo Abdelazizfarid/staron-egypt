@@ -1,0 +1,79 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import Pic from '../components/Pic.astro';
+import Icon from '../components/Icon.astro';
+import Cta from '../components/Cta.astro';
+import { company } from '../data/site.js';
+
+const history = [
+  ['2009', 'Staron Egypt starts as a solid surface supplier and fabricator for hospital projects in Cairo.'],
+  ['2013', 'Our own installation crews replace subcontractors; the first full operating theatre package is handed over.'],
+  ['2016', 'Quartz and vinyl flooring join the portfolio through Belenco and Tarkett.'],
+  ['2019', 'The 10th of Ramadan factory opens with CNC cutting and thermoforming lines.'],
+  ['2022', 'HPL compact and PVC wall protection complete the five-brand offer with CrownLam and AKS Profil.'],
+  ['Today', 'One company covering design, supply, fabrication and installation for healthcare, banking, residential and commercial clients.'],
+];
+const roles = [
+  ['Site engineer, finishing works', 'New Cairo projects', 'Full time'],
+  ['CNC operator', '10th of Ramadan factory', 'Full time'],
+  ['Technical office draughtsperson', 'Head office', 'Full time'],
+  ['Solid surface installer', 'Site teams, Egypt-wide', 'Full time'],
+];
+---
+<Layout title="About us" description="Staron Egypt is a specialised supply-and-apply contractor: technical office, direct import, our own factory and our own installation crews. Our mission, vision, values, history and careers." image="exterior" current="about">
+  <PageHero k="exterior" title="One team behind every surface" text="Technical office, warehouse, factory and site crews working as one company, so nothing is lost between trades." crumbs={[['About us']]} />
+
+  <section class="sec wrap" aria-labelledby="who-h">
+    <div class="intro">
+      <h2 id="who-h" class="sr">Who we are</h2>
+      <p class="intro__text" data-reveal-self>{company.description} Our clients are hospitals and ministries, banks, developers and the contractors who build for them; our measure is a surface that is still right ten years after handover.</p>
+      <div class="intro__pic" data-reveal-self><figure style="margin:0" class="round"><Pic k="m-solid" /></figure></div>
+      <p class="intro__note small" data-reveal-self>Every sheet we install is cut in our own factory and fitted by our own crews, which is why we can guarantee the joint.</p>
+    </div>
+  </section>
+
+  <section class="sec wrap" aria-labelledby="mvv-h">
+    <h2 class="h-sec" id="mvv-h" data-split style="margin-bottom:40px">Mission, vision and values</h2>
+    <div class="mvv" data-reveal>
+      <div><h3>Mission</h3><p>To give every project one accountable partner for its finishing surfaces, from the first drawing to the last joint.</p></div>
+      <div><h3>Vision</h3><p>To be the contractor Egypt’s hospitals, banks and developers name first when a surface has to perform.</p></div>
+      <div><h3>Values</h3><ul><li>Accountability</li><li>Precision</li><li>Material honesty</li><li>Hygiene first</li><li>Long-term care</li></ul></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="hist-h">
+    <div class="dark round" style="margin-inline:12px;padding-block:clamp(64px,8vw,120px)">
+      <div class="wrap split">
+        <div class="l sticky">
+          <h2 class="h-sec" id="hist-h" data-split>Our history</h2>
+          <p class="muted" style="margin-top:20px;max-width:40ch" data-reveal-self>From a single material to a five-brand, full-scope contractor.</p>
+          <figure class="round" style="margin:40px 0 0;aspect-ratio:4/3" data-reveal-self><Pic k="factory" class="cover" sizes="40vw" /></figure>
+        </div>
+        <ol class="timeline r" data-reveal>
+          {history.map(([y, t]) => <li><b>{y}</b><p>{t}</p></li>)}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec wrap" id="careers" aria-labelledby="join-h">
+    <div class="split">
+      <figure class="l round" style="margin:0;aspect-ratio:4/5" data-reveal-self><Pic k="installers" class="cover" sizes="40vw" /></figure>
+      <div class="r" data-reveal>
+        <h2 class="h-sec" id="join-h">Join our team</h2>
+        <p class="lead" style="margin:24px 0">We hire engineers, craftspeople and planners who care about the last millimetre. Training on every material is part of the job.</p>
+        <div class="apptable">
+          {roles.map(([r, where, kind]) => (
+            <a href={`mailto:careers@staronegypt.com?subject=${encodeURIComponent('Application: ' + r)}`} style="grid-template-columns:1fr auto">
+              <div><h3>{r}</h3><p>{where} · {kind}</p></div><Icon name="arrow" />
+            </a>
+          ))}
+        </div>
+        <p style="margin-top:24px">Don’t see your role? Send your CV to <a class="link" href="mailto:careers@staronegypt.com"><span>careers@staronegypt.com</span></a></p>
+      </div>
+    </div>
+  </section>
+
+  <Cta />
+</Layout>

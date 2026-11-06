@@ -1,0 +1,58 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHero from '../../../components/PageHero.astro';
+import Pic from '../../../components/Pic.astro';
+import Icon from '../../../components/Icon.astro';
+import PostCards from '../../../components/PostCards.astro';
+import Cta from '../../../components/Cta.astro';
+import { brands, M, P, postsFor } from '../../../data/site.js';
+import { u, routes } from '../../../data/url.js';
+export const getStaticPaths = () => brands.map((b) => ({ params: { brand: b.slug }, props: { b } }));
+const { b } = Astro.props;
+const m = M[b.material];
+---
+<Layout title={`${b.name} ${m.name.toLowerCase()}`} description={`${b.intro} Product ranges, strengths and articles. Supplied, fabricated and installed in Egypt by Staron Egypt.`} image={b.img} current="brands">
+  <PageHero k={b.img} title={b.name} text={b.intro} crumbs={[['Brands', u('brands')], [b.name]]} />
+
+  <section class="sec wrap" aria-labelledby="i-h">
+    <div class="split">
+      <div class="l" data-reveal>
+        <h2 class="h-sec" id="i-h">Intro & history</h2>
+        <dl class="facts" style="margin-top:32px">
+          <div><dt>Material</dt><dd><a class="link" href={routes.material(m.slug)}><span>{m.name}</span></a></dd></div>
+          <div><dt>Made in</dt><dd>{b.origin}</dd></div>
+          <div><dt>Since</dt><dd>{b.founded}</dd></div>
+          <div><dt>In Egypt</dt><dd>Supplied & installed by Staron Egypt</dd></div>
+        </dl>
+      </div>
+      <div class="r" data-reveal>
+        <p class="lead">{b.history}</p>
+        <ul class="ticks" style="margin-top:32px">{b.strengths.map((s) => <li><Icon name="check" />{s}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec wrap" aria-labelledby="p-h">
+    <h2 class="h-sec" id="p-h" data-split style="margin-bottom:40px">Product ranges</h2>
+    <div class="rows">
+      {b.products.map((s) => {
+        const p = P[s];
+        return (
+          <article class="row" data-reveal-self>
+            <a class="row__pic" href={routes.product(p)} tabindex="-1" aria-hidden="true"><Pic k={p.img} alt="" sizes="(max-width: 1024px) 100vw, 33vw" /></a>
+            <div class="row__body">
+              <span class="k">{p.colors.length} colours</span>
+              <h3><a href={routes.product(p)}>{p.name}</a></h3>
+              <p>{p.description}</p>
+              <div style="display:flex;gap:6px;margin-top:16px">{p.colors.slice(0, 8).map((c) => <span title={c.name} style={`width:22px;height:22px;border-radius:99px;background:${c.hex};box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)`}></span>)}</div>
+            </div>
+            <a class="row__go" href={routes.product(p)} aria-label={`${p.name} product page`}><Icon name="arrow" /></a>
+          </article>
+        );
+      })}
+    </div>
+  </section>
+
+  <PostCards list={postsFor('brands', b.slug)} heading={`Reading on ${b.name}`} />
+  <Cta />
+</Layout>

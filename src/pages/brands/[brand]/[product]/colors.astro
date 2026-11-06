@@ -1,0 +1,25 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import PageHero from '../../../../components/PageHero.astro';
+import Pic from '../../../../components/Pic.astro';
+import Icon from '../../../../components/Icon.astro';
+import Cta from '../../../../components/Cta.astro';
+import { products, B, M } from '../../../../data/site.js';
+import { u, routes } from '../../../../data/url.js';
+export const getStaticPaths = () => products.map((p) => ({ params: { brand: p.brand, product: p.slug }, props: { p } }));
+const { p } = Astro.props;
+const b = B[p.brand], m = M[b.material];
+---
+<Layout title={`${b.name} ${p.name} colours`} description={`All ${p.colors.length} colours of ${b.name} ${p.name}, with codes. Request samples from Staron Egypt.`} image={p.img} current="brands">
+  <PageHero k={p.img} title={`${p.name} colours`} text={`${p.colors.length} colours in the ${b.name} ${p.name} range. Ask for a physical sample before you specify.`} crumbs={[['Brands', u('brands')], [b.name, routes.brand(b.slug)], [p.name, routes.product(p)], ['Colours']]} />
+  <section class="sec wrap" aria-labelledby="all-h">
+    <div style="display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:40px" data-reveal>
+      <h2 class="h-sec" id="all-h">All colours</h2>
+      <a class="link" href={routes.product(p)}><span>Back to {p.name}</span><Icon name="arrow" /></a>
+    </div>
+    <ul class="swatches swgrid" data-reveal>
+      {p.colors.map((c) => <li class="sw"><div class="sw__chip" style={`--c:${c.hex}`}><Pic k={m.img} alt="" /></div><b>{c.name}</b><span>{c.code}</span></li>)}
+    </ul>
+  </section>
+  <Cta title="Order a sample set." text="Tell us the colours you are considering and the project they are for. We deliver samples to your office." />
+</Layout>

@@ -1,0 +1,83 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Pic from '../../components/Pic.astro';
+import Icon from '../../components/Icon.astro';
+import Cta from '../../components/Cta.astro';
+import { sectors, spaces, applications, S } from '../../data/site.js';
+import { u, routes } from '../../data/url.js';
+const offer = [
+  ['Technical office', 'Shop drawings, material schedules, samples and value engineering.'],
+  ['Supply', 'Direct import from five brands, local stock, certificates and test reports.'],
+  ['Fabrication', 'CNC cutting, thermoforming and finishing in our own factory.'],
+  ['Installation', 'Our own crews, supervised by material-trained project managers.'],
+  ['Aftercare', 'Maintenance guidance, repairs and refinishing after handover.'],
+];
+const usp = [
+  ['One contract, one warranty', 'Material, fabrication and installation sit with one company, so there is no gap between supplier and installer to argue over.'],
+  ['Our own factory', 'Work done off site under controlled conditions is faster on site and more precise.'],
+  ['Healthcare depth', 'We know infection-control and Ministry of Health requirements and document to them.'],
+  ['Five matched materials', 'Walls, worktops, floors, partitions and protection designed to meet at clean junctions.'],
+];
+---
+<Layout title="Solutions" description="Supply-and-apply finishing solutions for healthcare, residential, banking and commercial projects: by sector, by space and by application." image="corridor" current="solutions">
+  <PageHero k="corridor" title="Solutions by sector, space and use" text="Find the right surface for the room you are building, then let one team supply, fabricate and install it." crumbs={[['Solutions']]} />
+
+  <section class="sec wrap" aria-labelledby="sc-h">
+    <div class="split">
+      <div class="l" data-reveal>
+        <h2 class="h-sec" id="sc-h">Our scope</h2>
+        <p class="lead" style="margin-top:24px">We are a specialised contractor. We don’t finish whole buildings; we take the surfaces that have to perform and deliver them completely.</p>
+      </div>
+      <ol class="r steps" data-reveal>{offer.map(([t, d]) => <li><div><h3 class="h-3">{t}</h3><p class="muted">{d}</p></div></li>)}</ol>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="usp-h">
+    <div class="dark round" style="margin-inline:12px;padding-block:clamp(64px,8vw,120px)">
+      <div class="wrap">
+        <h2 class="h-sec" id="usp-h" data-split style="margin-bottom:48px">What makes us different</h2>
+        <div class="split" data-reveal>
+          {usp.map(([t, d], i) => <div class={i % 2 ? 'r' : 'l'} style="margin-bottom:40px"><h3 class="h-3" style="color:var(--bronze-soft);margin-bottom:10px">{t}</h3><p class="muted" style="max-width:48ch">{d}</p></div>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec wrap" aria-labelledby="se-h">
+    <h2 class="h-sec" id="se-h" data-split style="margin-bottom:40px">Sectors</h2>
+    <div class="rows">
+      {sectors.map((s) => (
+        <article class="row" data-reveal-self>
+          <a class="row__pic" href={routes.sector(s.slug)} tabindex="-1" aria-hidden="true"><Pic k={s.img} alt="" sizes="(max-width: 1024px) 100vw, 33vw" /></a>
+          <div class="row__body"><span class="k">{s.spaces.length} spaces</span><h3><a href={routes.sector(s.slug)}>{s.name}</a></h3><p>{s.line}</p></div>
+          <a class="row__go" href={routes.sector(s.slug)} aria-label={`${s.name} solutions`}><Icon name="arrow" /></a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec wrap" aria-labelledby="sp-h">
+    <h2 class="h-sec" id="sp-h" data-split style="margin-bottom:40px">Spaces</h2>
+    <div class="tiles">
+      {spaces.map((s) => (
+        <a class="tile" href={routes.space(s.slug)} data-reveal-self>
+          <div class="tile__pic"><Pic k={s.img} sizes="(max-width: 700px) 100vw, 33vw" /></div>
+          <span class="k">{S[s.sector].name}</span><h3>{s.name}</h3><p>{s.intro}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec wrap" aria-labelledby="ap-h">
+    <div class="split">
+      <h2 class="l h-sec" id="ap-h" data-split>Applications</h2>
+      <div class="r apptable" data-reveal>
+        {applications.map((a) => (
+          <a href={routes.application(a.slug)}><Pic k={a.img} alt="" /><div><h3>{a.name}</h3><p>{a.variants.join(' · ')}</p></div><Icon name="arrow" /></a>
+        ))}
+      </div>
+    </div>
+  </section>
+  <Cta />
+</Layout>

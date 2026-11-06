@@ -1,0 +1,181 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Pic from '../components/Pic.astro';
+import Icon from '../components/Icon.astro';
+import PostCards from '../components/PostCards.astro';
+import Cta from '../components/Cta.astro';
+import { materials, B, posts } from '../data/site.js';
+import { u, routes } from '../data/url.js';
+
+const slides = [
+  { k: 'or', tab: 'Solutions', title: 'Interior surfaces, supplied and installed.', text: 'We import from five international brands, fabricate in our own factory and install with our own crews. One contract from drawing to handover.', cta: 'Explore solutions', href: u('solutions') },
+  { k: 'kitchen', tab: 'Brands', title: 'Five brands. One accountable team.', text: 'Staron, Belenco, Tarkett, CrownLam and AKS Profil, specified, supplied and fitted by the same people.', cta: 'See the brands', href: u('brands') },
+  { k: 'factory', tab: 'Our factory', title: 'Cut, formed and finished in-house.', text: 'CNC cutting, thermoforming and edge work happen in our 10th of Ramadan factory, not on your site.', cta: 'About Staron Egypt', href: u('about') },
+  { k: 'corridor', tab: 'Healthcare', title: 'Built for the infection-control audit.', text: 'Seamless walls, heat-welded floors and wall protection, delivered as one hygienic system.', cta: 'Healthcare solutions', href: routes.sector('healthcare') },
+  { k: 'bank', tab: 'Banking', title: 'One counter, every branch.', text: 'Teller counters and lounges made to one standard in our factory and installed overnight.', cta: 'Banking solutions', href: routes.sector('banking') },
+  { k: 'reception', tab: 'Commercial', title: 'Lobbies that take the traffic.', text: 'Reception desks, washrooms and cafeterias for offices, malls and hotels.', cta: 'Commercial solutions', href: routes.sector('commercial') },
+  { k: 'desk', tab: 'Blog', title: 'Notes from the technical office.', text: 'How materials behave, where they fail and how we detail around it.', cta: 'Read the blog', href: u('blog') },
+  { k: 'installers', tab: 'Quotation', title: 'Tell us about your next project.', text: 'Send drawings or a bill of quantities and receive a priced proposal within five working days.', cta: 'Get quotation', href: u('contact', '?type=quotation#form'), bronze: true },
+];
+
+const scope = [
+  { k: 'desk', t: 'Design & technical office', d: 'Our engineers turn the architect’s intent into shop drawings, material schedules and details that can actually be built.', w: 'Shop drawings, samples, specifications' },
+  { k: 'warehouse', t: 'Supply', d: 'We import directly from five manufacturers and hold stock in our own warehouse, so programmes do not wait on shipping.', w: 'Direct import, local stock, certificates' },
+  { k: 'factory', t: 'Fabrication', d: 'Sheets and slabs are cut, thermoformed and finished in our factory under controlled conditions, then delivered ready to fit.', w: 'CNC cutting, thermoforming, edge work' },
+  { k: 'installers', t: 'Installation', d: 'Our own crews install, join and finish on site, led by project managers who know each material.', w: 'Site survey, installation, snagging' },
+  { k: 'patient', t: 'Handover & aftercare', d: 'Every space is handed over with documentation, cleaning guidance and a team that comes back when you need it.', w: 'As-built files, maintenance, repairs' },
+];
+
+const quotes = [
+  { q: 'The theatres were handed over with walls you cannot find the joints in. Infection control signed them off on the first inspection.', who: 'Head of Engineering', org: 'Private hospital group, Cairo' },
+  { q: 'Fifty branches, one counter design, and not one opening delayed. They fabricate ahead and install overnight.', who: 'Projects Director', org: 'Commercial bank, Egypt' },
+  { q: 'One contractor for the quartz, the vinyl and the washrooms meant one programme and one person to call.', who: 'Project Manager', org: 'Residential developer, New Cairo' },
+];
+---
+<Layout description="Staron Egypt supplies, fabricates and installs solid surface, quartz, vinyl flooring, HPL compact and PVC wall protection for healthcare, banking, residential and commercial projects across Egypt.">
+  <!-- 1. Hero slider: 8 slides, each leading to a main page -->
+  <section class="hero" data-hero aria-roledescription="carousel" aria-label="Staron Egypt highlights">
+    <div class="hero__frame">
+      {slides.map((s, i) => (
+        <div class:list={['slide', { on: i === 0 }]} aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}: ${s.tab}`}>
+          <Pic k={s.k} eager={i === 0} />
+          <div class="phero__top"></div>
+          <div class="phero__scrim"></div>
+          <div class="slide__body">
+            {i === 0 ? <h1 class="slide__title" data-split>{s.title}</h1> : <h2 class="slide__title" data-split>{s.title}</h2>}
+            <div class="slide__aside">
+              <p>{s.text}</p>
+              <a class:list={['btn', { 'btn--bronze': s.bronze }]} href={s.href}>{s.cta}<Icon name="arrow" /></a>
+            </div>
+          </div>
+        </div>
+      ))}
+      <div class="hero__nav" role="tablist" aria-label="Choose a slide">
+        {slides.map((s, i) => <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} class:list={{ on: i === 0 }}>{s.tab}</button>)}
+      </div>
+      <p class="hero__count" aria-hidden="true">1 / 8</p>
+    </div>
+  </section>
+
+  <!-- 2. Scope of work -->
+  <section class="sec wrap" aria-labelledby="scope-h">
+    <div class="scope" data-scope>
+      <div class="scope__media">
+        {scope.map((s, i) => <Pic k={s.k} class={i === 0 ? 'on' : ''} sizes="40vw" />)}
+      </div>
+      <div class="scope__list">
+        <h2 class="h-sec" id="scope-h" data-split>From drawing to handover</h2>
+        <p class="lead measure" data-reveal-self>Most finishing contractors buy from one company and subcontract the rest. We do the whole scope ourselves, so the joints between trades disappear along with the joints in the surface.</p>
+        {scope.map((s, i) => (
+          <div class:list={['scope__item', { on: i === 0 }]} tabindex="0">
+            <div class="mpic"><Pic k={s.k} sizes="100vw" /></div>
+            <h3>{s.t}</h3>
+            <p>{s.d}</p>
+            <p class="what">{s.w}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Flagship project -->
+  <section class="sec" aria-labelledby="flag-h">
+    <div class="flag">
+      <Pic k="nurse" data-parallax sizes="100vw" />
+      <div class="phero__top"></div>
+      <div class="phero__scrim"></div>
+      <div class="flag__top">
+        <h2 id="flag-h" data-split>Flagship project: a 300-bed hospital in New Cairo</h2>
+        <div class="flag__card" data-reveal-self>
+          <dl>
+            <dt>Client</dt><dd>Private healthcare group</dd>
+            <dt>Scope</dt><dd>Theatres, ICU, wards, nurse stations</dd>
+            <dt>Materials</dt><dd>Staron, Tarkett, AKS Profil</dd>
+            <dt>Programme</dt><dd>14 months, phased handover</dd>
+          </dl>
+          <a class="link" href={routes.sector('healthcare')}><span>How we work in healthcare</span><Icon name="arrow" /></a>
+        </div>
+      </div>
+      <div class="flag__fig">
+        <b><span data-count="9400">9,400</span><sup>m²</sup></b>
+        <p>of seamless solid surface walls, heat-welded vinyl and wall protection, supplied and installed by one team.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Material highlights -->
+  <section class="mats" data-htrack aria-labelledby="mats-h">
+    <div class="mats__stage">
+      <div class="mats__bg"><Pic k="warehouse" sizes="100vw" alt="" /></div>
+      <div class="mats__head">
+        <h2 class="h-sec" id="mats-h" data-split>Five materials, chosen for hard use</h2>
+        <p data-reveal-self>Each material comes from one manufacturer we trust and know in detail, so every specification we write is one we can build.</p>
+      </div>
+      <div class="mats__track">
+        {materials.map((m) => (
+          <a class="mcard" href={routes.material(m.slug)}>
+            <div class="mcard__pic"><Pic k={m.hero} sizes="(max-width: 1024px) 82vw, 560px" /></div>
+            <div class="mcard__body">
+              <h3>{m.name}</h3>
+              <span class="brand">{B[m.brand].name}</span>
+              <p>{m.short}</p>
+              <span class="mcard__go" aria-hidden="true"><Icon name="arrow" /></span>
+            </div>
+          </a>
+        ))}
+        <a class="mcard" href={u('brands')} style="background:var(--navy);color:#fff">
+          <div class="mcard__pic"><Pic k="m-solid" alt="" /></div>
+          <div class="mcard__body"><h3>All brands</h3><p style="color:var(--on-dark-muted)">See every brand, product range and colour.</p><span class="mcard__go" aria-hidden="true" style="background:var(--bronze)"><Icon name="arrow" /></span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Testimonials -->
+  <section class="sec" aria-labelledby="q-h">
+    <div class="quotes" data-quotes>
+      <Pic k="lounge" sizes="100vw" alt="" />
+      <h2 id="q-h" class="quotes__h" data-split>What clients say</h2>
+      <div class="quotes__in">
+        <div class="qslides" aria-live="polite">
+          {quotes.map((q, i) => (
+            <figure class:list={['qslide', { on: i === 0 }]} style="margin:0">
+              <blockquote>“{q.q}”</blockquote>
+              <figcaption><b>{q.who}</b>{q.org}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <div class="qctrl">
+          <span data-qcount>1 / {quotes.length}</span>
+          <button type="button" data-prev aria-label="Previous testimonial"><Icon name="arrowL" /></button>
+          <button type="button" data-next aria-label="Next testimonial"><Icon name="arrow" /></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. CEO message and numbers -->
+  <section class="sec wrap" aria-labelledby="ceo-h">
+    <div class="ceo">
+      <div class="ceo__pic" data-reveal-self><Pic k="exterior" sizes="(max-width: 1024px) 100vw, 40vw" /></div>
+      <div class="ceo__body" data-reveal>
+        <h2 class="h-sec" id="ceo-h">A word from our CEO</h2>
+        <p class="ceo__msg">“A surface is only as good as the joint you cannot see. We built a company that answers for every one of them.”</p>
+        <p>When we started, clients bought materials from one company, fabrication from another and installation from whoever was on site. Every handover between them was a risk. Staron Egypt was set up to remove those handovers.</p>
+        <p>Today our technical office, warehouse, factory and site teams work as one. It is slower to build a company that way, and much faster to build a hospital.</p>
+        <p class="sign"><b>Chief Executive Officer</b><span class="muted">Staron Egypt</span></p>
+      </div>
+    </div>
+    <div class="nums" data-reveal>
+      <div class="num"><b data-count="5">5</b><span>international brands, one point of contact</span></div>
+      <div class="num"><b><span data-count="600">600</span>+</b><span>projects handed over across Egypt</span></div>
+      <div class="num"><b><span data-count="15">15</span>+</b><span>years supplying and installing surfaces</span></div>
+      <div class="num"><b data-count="4">4</b><span>sectors: healthcare, banking, residential, commercial</span></div>
+    </div>
+  </section>
+
+  <!-- 7. Recent blog posts -->
+  <PostCards list={posts.slice(0, 3)} heading="Recent articles" />
+
+  <Cta />
+</Layout>

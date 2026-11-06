@@ -1,0 +1,57 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Pic from '../../components/Pic.astro';
+import Icon from '../../components/Icon.astro';
+import PostCards from '../../components/PostCards.astro';
+import Cta from '../../components/Cta.astro';
+import { materials, B, P, applications, postsFor } from '../../data/site.js';
+import { u, routes } from '../../data/url.js';
+export const getStaticPaths = () => materials.map((m) => ({ params: { slug: m.slug }, props: { m } }));
+const { m } = Astro.props;
+const b = B[m.brand];
+const apps = applications.filter((a) => a.products.some((p) => P[p].brand === b.slug));
+---
+<Layout title={`${m.name}`} description={`${m.name}: ${m.short} History, best uses and quality indicators, supplied and installed in Egypt by Staron Egypt with ${b.name}.`} image={m.hero} current="brands">
+  <PageHero k={m.hero} title={m.name} text={m.short} crumbs={[['Brands', u('brands')], [m.name]]} />
+
+  <section class="sec wrap" aria-labelledby="d-h">
+    <div class="split">
+      <figure class="l round" style="margin:0;aspect-ratio:4/5" data-reveal-self><Pic k={m.img} class="cover" /></figure>
+      <div class="r" data-reveal>
+        <h2 class="h-sec" id="d-h">What it is</h2>
+        <p class="lead" style="margin:24px 0">{m.description}</p>
+        <p>Our brand for {m.name.toLowerCase()} is <a class="link" href={routes.brand(b.slug)}><span>{b.name}</span><Icon name="arrow" /></a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-h">
+    <div class="dark round" style="margin-inline:12px;padding-block:clamp(64px,8vw,120px)">
+      <div class="wrap split">
+        <h2 class="l h-sec" id="h-h" data-split>A short history</h2>
+        <ol class="r timeline" data-reveal>{m.history.map(([y, t]) => <li><b>{y}</b><p>{t}</p></li>)}</ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec wrap" aria-labelledby="u-h">
+    <div class="split">
+      <div class="l" data-reveal>
+        <h2 class="h-sec" id="u-h">Best uses</h2>
+        <ul class="uses" style="margin-top:32px">{m.bestUses.map((x) => <li>{x}</li>)}</ul>
+        {apps.length > 0 && <>
+          <h3 class="h-3" style="margin:48px 0 16px">Our applications</h3>
+          <div class="chips">{apps.map((a) => <a href={routes.application(a.slug)}>{a.name}</a>)}</div>
+        </>}
+      </div>
+      <div class="r" data-reveal>
+        <h2 class="h-sec" id="q-h">Quality indicators</h2>
+        <dl class="facts" style="margin-top:32px">{m.quality.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+      </div>
+    </div>
+  </section>
+
+  <PostCards list={postsFor('materials', m.slug)} heading={`Reading on ${m.name.toLowerCase()}`} />
+  <Cta />
+</Layout>

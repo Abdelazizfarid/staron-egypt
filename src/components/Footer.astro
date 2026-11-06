@@ -1,0 +1,55 @@
+---
+import Icon from './Icon.astro';
+import { company } from '../data/site.js';
+import { u } from '../data/url.js';
+const socials = ['facebook', 'linkedin', 'instagram', 'youtube', 'x', 'tiktok', 'snapchat'];
+const names = { facebook: 'Facebook', linkedin: 'LinkedIn', instagram: 'Instagram', youtube: 'YouTube', x: 'X', tiktok: 'TikTok', snapchat: 'Snapchat' };
+const map = [['Home', ''], ['About', 'about'], ['Brands', 'brands'], ['Solutions', 'solutions'], ['Blog', 'blog'], ['Contact', 'contact'], ['Get quotation', 'contact'], ['Careers', 'about']];
+const year = new Date().getFullYear();
+---
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr__main" data-reveal>
+      <div>
+        <a class="logo" href={u()} aria-label="Staron Egypt, home"><b>staron</b><i>EGYPT</i></a>
+        <p class="ftr__desc">{company.description}</p>
+      </div>
+      <div>
+        <h2>Site map</h2>
+        <ul class="sitemap">
+          {map.map(([l, p], i) => <li><a href={i === 6 ? u(p, '?type=quotation#form') : i === 7 ? u(p, '#careers') : u(p)}>{l}</a></li>)}
+        </ul>
+        <h2>Newsletter</h2>
+        <p class="small">Project notes and material news, about once a month.</p>
+        <form class="news" data-news novalidate>
+          <label class="sr" for="news-email">Email address</label>
+          <input id="news-email" type="email" name="email" placeholder="Your work email" required autocomplete="email" />
+          <button class="btn btn--bronze" type="submit">Subscribe</button>
+        </form>
+        <p class="news-msg" role="status" aria-live="polite"></p>
+      </div>
+      <div>
+        <h2>Contact</h2>
+        <div class="locs">
+          {company.locations.map((l) => (
+            <a href={`https://www.google.com/maps?q=${l.lat},${l.lng}`} target="_blank" rel="noopener"><Icon name="pin" /><span><b>{l.name}</b>{l.address}</span></a>
+          ))}
+          <a href={`tel:${company.phone.replace(/\s/g, '')}`}><Icon name="phone" /><span><b>Mobile</b>{company.phone}</span></a>
+          <a href={`tel:${company.landline.replace(/\s/g, '')}`}><Icon name="phone" /><span><b>Landline</b>{company.landline}</span></a>
+          <a href={`mailto:${company.email}`}><Icon name="mail" /><span><b>Email</b>{company.email}</span></a>
+        </div>
+        <ul class="socials" aria-label="Social media">
+          {socials.map((s) => <li><a href={company.social[s]} target="_blank" rel="noopener" aria-label={names[s]}><Icon name={s} /></a></li>)}
+          <li><a href={`https://wa.me/${company.whatsapp}`} target="_blank" rel="noopener" aria-label="WhatsApp"><Icon name="whatsapp" /></a></li>
+        </ul>
+        <h2>Work week</h2>
+        <dl class="week">{company.workweek.map(([d, t]) => <><dt>{d}</dt><dd>{t}</dd></>)}</dl>
+      </div>
+    </div>
+    <p class="ftr__word" aria-hidden="true">staron<span>.</span></p>
+  </div>
+  <div class="ftr__bottom wrap">
+    <p>© {year} Staron Egypt. All rights reserved.</p>
+    <nav aria-label="Legal"><a href={u('privacy')}>Privacy policy</a><a href={u('terms')}>Terms of use</a></nav>
+  </div>
+</footer>

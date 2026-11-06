@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { u } from '../data/url.js';
+---
+<Layout title="Page not found" description="This page could not be found." noindex>
+  <PageHero k="m-solid" title="This page has no surface yet" text="The link may be old. Try the search above, or start from the home page." crumbs={[['Not found']]} />
+  <section class="sec wrap"><a class="btn btn--navy" href={u()}>Back to home</a></section>
+</Layout>

@@ -1,0 +1,55 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHero from '../../../components/PageHero.astro';
+import Pic from '../../../components/Pic.astro';
+import Icon from '../../../components/Icon.astro';
+import PostCards from '../../../components/PostCards.astro';
+import Cta from '../../../components/Cta.astro';
+import { sectors, SP, A, P, B, postsFor } from '../../../data/site.js';
+import { u, routes } from '../../../data/url.js';
+export const getStaticPaths = () => sectors.map((s) => ({ params: { slug: s.slug }, props: { s } }));
+const { s } = Astro.props;
+const appSlugs = [...new Set(s.spaces.flatMap((sp) => SP[sp].applications))];
+const usedBrands = [...new Set(appSlugs.flatMap((a) => A[a].products.map((p) => P[p].brand)))];
+---
+<Layout title={`${s.name} interior finishing`} description={`${s.line} ${s.relevance.slice(0, 120)}…`} image={s.img} current="solutions">
+  <PageHero k={s.img} title={s.name} text={s.line} crumbs={[['Solutions', u('solutions')], [s.name]]} />
+
+  <section class="sec wrap" aria-labelledby="r-h">
+    <div class="split">
+      <div class="l" data-reveal>
+        <h2 class="h-sec" id="r-h">Why the surface matters here</h2>
+        <p class="lead" style="margin-top:24px">{s.relevance}</p>
+        <div class="chips" style="margin-top:32px">{usedBrands.map((b) => <a href={routes.brand(b)}>{B[b].name}</a>)}</div>
+      </div>
+      <div class="r" data-reveal>
+        <h2 class="h-3" style="margin-bottom:20px">Technical & compliance points</h2>
+        <ul class="ticks">{s.compliance.map((c) => <li><Icon name="check" />{c}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec wrap" aria-labelledby="a-h">
+    <h2 class="h-sec" id="a-h" data-split style="margin-bottom:40px">Notable applications and the products behind them</h2>
+    <div class="apptable" data-reveal>
+      {appSlugs.map((a) => (
+        <a href={routes.application(a)}><Pic k={A[a].img} alt="" /><div><h3>{A[a].name}</h3><p>{A[a].products.map((p) => `${B[P[p].brand].name} ${P[p].name}`).join(' · ')}</p></div><Icon name="arrow" /></a>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec wrap" aria-labelledby="sp-h">
+    <h2 class="h-sec" id="sp-h" data-split style="margin-bottom:40px">Spaces in {s.name.toLowerCase()}</h2>
+    <div class="tiles">
+      {s.spaces.map((sp) => (
+        <a class="tile" href={routes.space(sp)} data-reveal-self>
+          <div class="tile__pic"><Pic k={SP[sp].img} sizes="(max-width: 700px) 100vw, 33vw" /></div>
+          <h3>{SP[sp].name}</h3><p>{SP[sp].intro}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <PostCards list={postsFor('sectors', s.slug)} heading={`Reading on ${s.name.toLowerCase()}`} />
+  <Cta />
+</Layout>

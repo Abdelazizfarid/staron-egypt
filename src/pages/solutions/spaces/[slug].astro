@@ -1,0 +1,39 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHero from '../../../components/PageHero.astro';
+import Pic from '../../../components/Pic.astro';
+import Icon from '../../../components/Icon.astro';
+import PostCards from '../../../components/PostCards.astro';
+import Cta from '../../../components/Cta.astro';
+import { spaces, S, A, P, B, postsFor } from '../../../data/site.js';
+import { u, routes } from '../../../data/url.js';
+export const getStaticPaths = () => spaces.map((s) => ({ params: { slug: s.slug }, props: { s } }));
+const { s } = Astro.props;
+const sec = S[s.sector];
+---
+<Layout title={`${s.name}: ${sec.name.toLowerCase()} finishing`} description={`${s.intro} Applications and products for ${s.name.toLowerCase()}, supplied and installed by Staron Egypt.`} image={s.img} current="solutions">
+  <PageHero k={s.img} title={s.name} text={s.intro} crumbs={[['Solutions', u('solutions')], [sec.name, routes.sector(sec.slug)], [s.name]]} />
+
+  <section class="sec wrap" aria-labelledby="a-h">
+    <h2 class="h-sec" id="a-h" data-split style="margin-bottom:40px">What we do in this space</h2>
+    <div class="rows">
+      {s.applications.map((a) => {
+        const ap = A[a];
+        return (
+          <article class="row" data-reveal-self>
+            <a class="row__pic" href={routes.application(a)} tabindex="-1" aria-hidden="true"><Pic k={ap.img} alt="" sizes="(max-width: 1024px) 100vw, 33vw" /></a>
+            <div class="row__body">
+              <h3><a href={routes.application(a)}>{ap.name}</a></h3>
+              <p>{ap.history}</p>
+              <div class="chips" style="margin-top:16px">{ap.products.map((p) => <a href={routes.product(P[p])}>{B[P[p].brand].name} {P[p].name}</a>)}</div>
+            </div>
+            <a class="row__go" href={routes.application(a)} aria-label={ap.name}><Icon name="arrow" /></a>
+          </article>
+        );
+      })}
+    </div>
+  </section>
+
+  <PostCards list={postsFor('spaces', s.slug)} heading="Related reading" />
+  <Cta />
+</Layout>

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://abdelazizfarid.github.io/staron-egypt/sitemap-index.xml

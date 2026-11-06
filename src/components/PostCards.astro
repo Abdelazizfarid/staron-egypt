@@ -1,0 +1,24 @@
+---
+import Pic from './Pic.astro';
+import { fmtDate } from '../data/site.js';
+import { routes } from '../data/url.js';
+const { list, heading = 'From the blog', all = true } = Astro.props;
+import { u } from '../data/url.js';
+import Icon from './Icon.astro';
+---
+<section class="sec wrap">
+  <div class="posts">
+    <div class="posts__head" data-reveal>
+      <h2 class="h-sec">{heading}</h2>
+      {all && <a class="link" href={u('blog')}><span>All articles</span><Icon name="arrow" /></a>}
+    </div>
+    {list.map((p) => (
+      <a class="pcard" href={routes.post(p.slug)} data-reveal-self>
+        <div class="pcard__pic"><Pic k={p.img} sizes="(max-width: 1024px) 100vw, 50vw" /></div>
+        <p class="meta">{fmtDate(p.date)} · {p.minutes} min read</p>
+        <h3>{p.title}</h3>
+        <p>{p.excerpt}</p>
+      </a>
+    ))}
+  </div>
+</section>
