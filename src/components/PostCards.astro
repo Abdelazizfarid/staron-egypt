@@ -15,9 +15,9 @@ import Icon from './Icon.astro';
     {list.map((p) => (
       <a class="pcard" href={routes.post(p.slug)} data-reveal-self>
         <div class="pcard__pic"><Pic k={p.img} sizes="(max-width: 1024px) 100vw, 50vw" /></div>
-        <p class="meta">{fmtDate(p.date)} · {p.minutes} min read</p>
         <h3>{p.title}</h3>
         <p>{p.excerpt}</p>
+        <p class="meta">{fmtDate(p.date)} · {p.minutes} min read</p>
       </a>
     ))}
   </div>

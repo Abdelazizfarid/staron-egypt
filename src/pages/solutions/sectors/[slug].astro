@@ -30,7 +30,7 @@ const usedBrands = [...new Set(appSlugs.flatMap((a) => A[a].products.map((p) => 
   </section>
 
   <section class="sec wrap" aria-labelledby="a-h">
-    <h2 class="h-sec" id="a-h" data-split style="margin-bottom:40px">Notable applications and the products behind them</h2>
+    <h2 class="h-sec" id="a-h" data-split style="margin-bottom:40px">Key applications and products</h2>
     <div class="apptable" data-reveal>
       {appSlugs.map((a) => (
         <a href={routes.application(a)}><Pic k={A[a].img} alt="" /><div><h3>{A[a].name}</h3><p>{A[a].products.map((p) => `${B[P[p].brand].name} ${P[p].name}`).join(' · ')}</p></div><Icon name="arrow" /></a>

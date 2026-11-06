@@ -12,7 +12,7 @@ const { b } = Astro.props;
 const m = M[b.material];
 ---
 <Layout title={`${b.name} ${m.name.toLowerCase()}`} description={`${b.intro} Product ranges, strengths and articles. Supplied, fabricated and installed in Egypt by Staron Egypt.`} image={b.img} current="brands">
-  <PageHero k={b.img} title={b.name} text={b.intro} crumbs={[['Brands', u('brands')], [b.name]]} />
+  <PageHero k={b.img} title={`${b.name} ${m.name.toLowerCase()}`} text={b.intro} crumbs={[['Brands', u('brands')], [b.name]]} />
 
   <section class="sec wrap" aria-labelledby="i-h">
     <div class="split">

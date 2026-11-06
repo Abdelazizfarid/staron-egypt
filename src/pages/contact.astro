@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
+import Pic from '../components/Pic.astro';
+const locPic = { office: 'exterior', warehouse: 'warehouse', factory: 'factory' };
 import { company, materials, sectors } from '../data/site.js';
 const socials = ['facebook', 'linkedin', 'instagram', 'youtube', 'x', 'tiktok', 'snapchat'];
 const names = { facebook: 'Facebook', linkedin: 'LinkedIn', instagram: 'Instagram', youtube: 'YouTube', x: 'X', tiktok: 'TikTok', snapchat: 'Snapchat' };
@@ -68,7 +70,7 @@ const osm = (l) => `https://www.openstreetmap.org/export/embed.html?bbox=${l.lng
       <div class="maptabs" role="tablist" aria-label="Locations">
         {company.locations.map((l, i) => (
           <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} aria-controls="mapbox" data-src={osm(l)} data-name={l.name}>
-            <b>{l.name}</b><span>{l.address}</span>
+            <Pic k={locPic[l.key]} alt={`${l.name}: ${l.address}`} /><span><b>{l.name}</b><span>{l.address}</span></span>
           </button>
         ))}
       </div>

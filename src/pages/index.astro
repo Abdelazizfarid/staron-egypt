@@ -8,7 +8,7 @@ import { materials, B, posts } from '../data/site.js';
 import { u, routes } from '../data/url.js';
 
 const slides = [
-  { k: 'or', tab: 'Solutions', title: 'Interior surfaces, supplied and installed.', text: 'We import from five international brands, fabricate in our own factory and install with our own crews. One contract from drawing to handover.', cta: 'Explore solutions', href: u('solutions') },
+  { k: 'or', tab: 'Solutions', title: 'Surfaces built for hard use.', text: 'We import from five international brands, fabricate in our own factory and install with our own crews. One contract from drawing to handover.', cta: 'Explore solutions', href: u('solutions') },
   { k: 'kitchen', tab: 'Brands', title: 'Five brands. One accountable team.', text: 'Staron, Belenco, Tarkett, CrownLam and AKS Profil, specified, supplied and fitted by the same people.', cta: 'See the brands', href: u('brands') },
   { k: 'factory', tab: 'Our factory', title: 'Cut, formed and finished in-house.', text: 'CNC cutting, thermoforming and edge work happen in our 10th of Ramadan factory, not on your site.', cta: 'About Staron Egypt', href: u('about') },
   { k: 'corridor', tab: 'Healthcare', title: 'Built for the infection-control audit.', text: 'Seamless walls, heat-welded floors and wall protection, delivered as one hygienic system.', cta: 'Healthcare solutions', href: routes.sector('healthcare') },
@@ -36,13 +36,14 @@ const quotes = [
   <!-- 1. Hero slider: 8 slides, each leading to a main page -->
   <section class="hero" data-hero aria-roledescription="carousel" aria-label="Staron Egypt highlights">
     <div class="hero__frame">
+      <h1 class="hero__h1">Staron Egypt: interior finishing surfaces, supplied, fabricated and installed.</h1>
       {slides.map((s, i) => (
         <div class:list={['slide', { on: i === 0 }]} aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}: ${s.tab}`}>
           <Pic k={s.k} eager={i === 0} />
           <div class="phero__top"></div>
           <div class="phero__scrim"></div>
           <div class="slide__body">
-            {i === 0 ? <h1 class="slide__title" data-split>{s.title}</h1> : <h2 class="slide__title" data-split>{s.title}</h2>}
+            <h2 class="slide__title" data-split>{s.title}</h2>
             <div class="slide__aside">
               <p>{s.text}</p>
               <a class:list={['btn', { 'btn--bronze': s.bronze }]} href={s.href}>{s.cta}<Icon name="arrow" /></a>
@@ -70,8 +71,7 @@ const quotes = [
           <div class:list={['scope__item', { on: i === 0 }]} tabindex="0">
             <div class="mpic"><Pic k={s.k} sizes="100vw" /></div>
             <h3>{s.t}</h3>
-            <p>{s.d}</p>
-            <p class="what">{s.w}</p>
+            <p>{s.d} <span class="muted">Includes {s.w.toLowerCase()}.</span></p>
           </div>
         ))}
       </div>
@@ -85,7 +85,7 @@ const quotes = [
       <div class="phero__top"></div>
       <div class="phero__scrim"></div>
       <div class="flag__top">
-        <h2 id="flag-h" data-split>Flagship project: a 300-bed hospital in New Cairo</h2>
+        <h2 id="flag-h" data-split>Flagship: a hospital in New Cairo</h2>
         <div class="flag__card" data-reveal-self>
           <dl>
             <dt>Client</dt><dd>Private healthcare group</dd>
@@ -111,7 +111,7 @@ const quotes = [
         <h2 class="h-sec" id="mats-h" data-split>Five materials, chosen for hard use</h2>
         <p data-reveal-self>Each material comes from one manufacturer we trust and know in detail, so every specification we write is one we can build.</p>
       </div>
-      <div class="mats__track">
+      <div class="mats__view"><div class="mats__track">
         {materials.map((m) => (
           <a class="mcard" href={routes.material(m.slug)}>
             <div class="mcard__pic"><Pic k={m.hero} sizes="(max-width: 1024px) 82vw, 560px" /></div>
@@ -127,7 +127,7 @@ const quotes = [
           <div class="mcard__pic"><Pic k="m-solid" alt="" /></div>
           <div class="mcard__body"><h3>All brands</h3><p style="color:var(--on-dark-muted)">See every brand, product range and colour.</p><span class="mcard__go" aria-hidden="true" style="background:var(--bronze)"><Icon name="arrow" /></span></div>
         </a>
-      </div>
+      </div></div>
     </div>
   </section>
 

@@ -19,7 +19,7 @@ const ld = {
         <nav aria-label="Breadcrumb"><ol class="crumbs">{all.map(([l, h], i) => <li>{h && i < all.length - 1 ? <a href={h}>{l}</a> : <span aria-current="page">{l}</span>}</li>)}</ol></nav>
         <h1 data-split="now">{title}</h1>
       </div>
-      {text && <p data-reveal-self>{text}</p>}
+      {text && <p>{text}</p>}
     </div>
   </div>
   <script type="application/ld+json" set:html={JSON.stringify(ld)} />

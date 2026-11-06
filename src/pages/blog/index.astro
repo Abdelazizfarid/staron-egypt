@@ -30,9 +30,9 @@ const textOf = (p) => `${p.title} ${p.excerpt} ${Object.values(p.tags).flat().jo
       {posts.map((p) => (
         <a class="pcard" href={routes.post(p.slug)} data-title={p.title} data-date={p.date} data-tags={tagsOf(p)} data-text={textOf(p)}>
           <div class="pcard__pic"><Pic k={p.img} sizes="(max-width: 760px) 100vw, 33vw" /></div>
-          <p class="meta">{fmtDate(p.date)} · {p.minutes} min read</p>
           <h3>{p.title}</h3>
           <p>{p.excerpt}</p>
+          <p class="meta">{fmtDate(p.date)} · {p.minutes} min read</p>
         </a>
       ))}
     </div>

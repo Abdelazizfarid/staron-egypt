@@ -51,8 +51,9 @@ const org = {
   <link rel="sitemap" href={asset('sitemap-index.xml')} />
   <link rel="preconnect" href="https://api.fontshare.com" />
   <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
-  <link href="https://api.fontshare.com/v2/css?f[]=sentient@300,400&f[]=general-sans@400,500,600&display=swap" rel="stylesheet" />
-  <script is:inline>document.documentElement.classList.add('js')</script>
+  <link href="https://api.fontshare.com/v2/css?f[]=sentient@300,400&display=swap" rel="stylesheet" />
+  <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet" />
+  <script is:inline>document.documentElement.classList.add('js');setTimeout(function(){if(!window.__revealOK)document.documentElement.classList.remove('js')},3000)</script>
   <script type="application/ld+json" set:html={JSON.stringify([org, ...jsonld])} />
 </head>
 <body>

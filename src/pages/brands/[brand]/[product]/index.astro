@@ -14,20 +14,20 @@ const apps = applications.filter((a) => a.products.includes(p.slug));
 const ld = { '@context': 'https://schema.org', '@type': 'Product', name: `${b.name} ${p.name}`, brand: { '@type': 'Brand', name: b.name }, description: p.description, category: m.name };
 ---
 <Layout title={`${b.name} ${p.name}`} description={`${b.name} ${p.name}: ${p.description}`} image={p.img} current="brands" jsonld={[ld]}>
-  <PageHero k={p.img} title={p.name} text={p.description} crumbs={[['Brands', u('brands')], [b.name, routes.brand(b.slug)], [p.name]]} />
+  <PageHero k={p.img} title={`${b.name} ${p.name}`} text={p.description} crumbs={[['Brands', u('brands')], [b.name, routes.brand(b.slug)], [p.name]]} />
 
   <section class="sec wrap" aria-labelledby="s-h">
     <div class="split">
       <div class="l" data-reveal>
         <h2 class="h-sec" id="s-h">Why {b.name}</h2>
-        <ul class="ticks" style="margin:32px 0 40px">{b.strengths.map((s) => <li><Icon name="check" />{s}</li>)}</ul>
-        {apps.length > 0 && <><h3 class="h-3" style="margin-bottom:16px">Used for</h3><div class="chips">{apps.map((a) => <a href={routes.application(a.slug)}>{a.name}</a>)}</div></>}
+        <ul class="ticks" style="margin-top:32px">{b.strengths.map((s) => <li><Icon name="check" />{s}</li>)}</ul>
       </div>
       <div class="r" data-reveal>
         <h2 class="h-sec">Technical specifications</h2>
         <dl class="facts" style="margin:32px 0 40px">{p.specs.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
         <h3 class="h-3" style="margin-bottom:16px">Documents</h3>
         <div class="docs">{p.docs.map((d) => <a href={u('contact', `?type=documents&doc=${encodeURIComponent(b.name + ' ' + p.name + ' – ' + d)}#form`)}>{d}<Icon name="doc" /></a>)}</div>
+        {apps.length > 0 && <><h3 class="h-3" style="margin:40px 0 16px">Used for</h3><div class="chips">{apps.map((a) => <a href={routes.application(a.slug)}>{a.name}</a>)}</div></>}
       </div>
     </div>
   </section>

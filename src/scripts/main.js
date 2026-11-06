@@ -4,6 +4,7 @@ import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 
 gsap.registerPlugin(ScrollTrigger);
+window.__revealOK = true;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -256,7 +257,8 @@ const mm = gsap.matchMedia();
 mm.add('(min-width: 1025px) and (prefers-reduced-motion: no-preference)', () => {
   $$('[data-htrack]').forEach((root) => {
     const stage = $('.mats__stage', root), track = $('.mats__track', root);
-    const dist = () => track.scrollWidth - innerWidth + parseFloat(getComputedStyle(track).paddingLeft);
+    const view = $('.mats__view', root);
+    const dist = () => track.scrollWidth - view.clientWidth;
     gsap.to(track, {
       x: () => -dist(), ease: 'none',
       scrollTrigger: { trigger: stage, start: 'top top', end: () => `+=${dist()}`, pin: true, scrub: 0.8, invalidateOnRefresh: true },
